@@ -1,0 +1,80 @@
+[
+  {
+    "model_name": "Baseline 1: Seasonal Naive",
+    "architecture_type": "Baseline",
+    "evaluation_protocol": "Fixed-Origin Direct Multi-Step (Pre-Origin 52w Observed Lag)",
+    "forecast_horizon": "h = 1..19 weeks out-of-time (Zero intermediate feedback)",
+    "val_mae": 10460.85,
+    "val_rmse": 18780.38,
+    "val_wape": 16.05,
+    "test_mae": 8597.83,
+    "test_rmse": 14079.11,
+    "test_wape": 14.28,
+    "status": "Audited"
+  },
+  {
+    "model_name": "Baseline 3: Random Forest",
+    "architecture_type": "Baseline",
+    "evaluation_protocol": "Fixed-Origin Recursive Multi-Step (Autoregressive Roll-Forward)",
+    "forecast_horizon": "h = 1..19 weeks out-of-time (Zero intermediate feedback)",
+    "val_mae": 8812.40,
+    "val_rmse": 15210.15,
+    "val_wape": 13.51,
+    "test_mae": 8753.77,
+    "test_rmse": 13890.45,
+    "test_wape": 14.54,
+    "status": "Audited"
+  },
+  {
+    "model_name": "Baseline 4: XGBoost",
+    "architecture_type": "Baseline",
+    "evaluation_protocol": "Fixed-Origin Recursive Multi-Step (Autoregressive Roll-Forward)",
+    "forecast_horizon": "h = 1..19 weeks out-of-time (Zero intermediate feedback)",
+    "val_mae": 9045.30,
+    "val_rmse": 14680.12,
+    "val_wape": 13.88,
+    "test_mae": 8989.86,
+    "test_rmse": 13912.80,
+    "test_wape": 14.94,
+    "status": "Audited"
+  },
+  {
+    "model_name": "Baseline 5A: Prophet",
+    "architecture_type": "Baseline",
+    "evaluation_protocol": "Fixed-Origin Direct Multi-Step (Annual Fourier Harmonics + Holidays)",
+    "forecast_horizon": "h = 1..19 weeks out-of-time (Zero intermediate feedback)",
+    "val_mae": 8399.21,
+    "val_rmse": 13479.59,
+    "val_wape": 12.88,
+    "test_mae": 9080.32,
+    "test_rmse": 13350.01,
+    "test_wape": 15.09,
+    "status": "Selected Final (Lowest Validation WAPE)"
+  },
+  {
+    "model_name": "Baseline 2: ElasticNet",
+    "architecture_type": "Baseline",
+    "evaluation_protocol": "Fixed-Origin Recursive Multi-Step (Linear Autoregressive Roll-Forward)",
+    "forecast_horizon": "h = 1..19 weeks out-of-time (Zero intermediate feedback)",
+    "val_mae": 19412.00,
+    "val_rmse": 25110.40,
+    "val_wape": 29.80,
+    "test_mae": 22093.21,
+    "test_rmse": 26890.15,
+    "test_wape": 36.71,
+    "status": "Audited"
+  },
+  {
+    "model_name": "Baseline 5B: SARIMAX",
+    "architecture_type": "Baseline",
+    "evaluation_protocol": "Fixed-Origin State-Space Multi-Step (Kalman Filtered Forecast)",
+    "forecast_horizon": "h = 1..19 weeks out-of-time (Zero intermediate feedback)",
+    "val_mae": 26506.58,
+    "val_rmse": 40916.03,
+    "val_wape": 40.66,
+    "test_mae": 29260.41,
+    "test_rmse": 42721.19,
+    "test_wape": 48.61,
+    "status": "Audited"
+  }
+]

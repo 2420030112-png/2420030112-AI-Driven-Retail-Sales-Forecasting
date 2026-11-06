@@ -100,13 +100,13 @@ export const ForecastsPage: React.FC = () => {
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-zinc-200 bg-zinc-50/70 text-[11px] font-bold uppercase tracking-wider text-zinc-500 font-mono">
-                  <th className="py-3 px-4">Store Entity</th>
+                  <th className="py-3 px-4">Store</th>
                   <th className="py-3 px-4">Department</th>
-                  <th className="py-3 px-4">Horizon</th>
-                  <th className="py-3 px-4">Generated</th>
+                  <th className="py-3 px-4">Forecast Horizon</th>
+                  <th className="py-3 px-4">Model</th>
+                  <th className="py-3 px-4">Created</th>
                   <th className="py-3 px-4">Status</th>
                   <th className="py-3 px-4 text-right">Projected Demand</th>
-                  <th className="py-3 px-4 text-right">Expected Lift</th>
                   <th className="py-3 px-4 text-center">Action</th>
                 </tr>
               </thead>
@@ -138,39 +138,38 @@ export const ForecastsPage: React.FC = () => {
                       </span>
                     </td>
 
-                    {/* Generated time */}
-                    <td className="py-3.5 px-4 text-zinc-500 whitespace-nowrap">
+                    {/* Model */}
+                    <td className="py-3.5 px-4 text-zinc-700">
+                      <div className="font-medium text-zinc-900 text-xs truncate max-w-[180px]">
+                        {fc.modelUsed}
+                      </div>
+                      <div className="text-[10px] text-emerald-700 font-mono">
+                        {fc.metrics.mape}% MAPE
+                      </div>
+                    </td>
+
+                    {/* Created */}
+                    <td className="py-3.5 px-4 text-zinc-500 whitespace-nowrap text-xs">
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-zinc-400" />
                         <span>{fc.createdAt}</span>
                       </div>
                     </td>
 
-                    {/* Forecast status */}
+                    {/* Status */}
                     <td className="py-3.5 px-4">
                       <StatusBadge status={fc.status} />
                     </td>
 
                     {/* Projected Sales */}
                     <td className="py-3.5 px-4 text-right font-mono font-semibold text-zinc-950">
-                      ${fc.projectedSales.toLocaleString()}
+                      <div>${fc.projectedSales.toLocaleString()}</div>
+                      <div className="text-[11px] text-emerald-600 font-normal">
+                        +{fc.changePercent}%
+                      </div>
                     </td>
 
-                    {/* Expected Change */}
-                    <td className="py-3.5 px-4 text-right font-mono">
-                      <span
-                        className={`inline-block px-1.5 py-0.5 rounded text-xs font-semibold ${
-                          fc.changePercent >= 0
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : 'bg-rose-50 text-rose-700'
-                        }`}
-                      >
-                        {fc.changePercent >= 0 ? '+' : ''}
-                        {fc.changePercent}%
-                      </span>
-                    </td>
-
-                    {/* View Action */}
+                    {/* Action */}
                     <td className="py-3.5 px-4 text-center">
                       <span className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 group-hover:text-zinc-950 group-hover:underline">
                         View

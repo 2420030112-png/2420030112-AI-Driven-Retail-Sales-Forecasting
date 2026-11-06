@@ -1,12 +1,12 @@
 import React from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { PageHeader } from '../components/common/PageHeader'
 import { Metric } from '../components/common/Metric'
 import { StatusBadge } from '../components/common/StatusBadge'
 import { ActionButton } from '../components/common/ActionButton'
 import { ChartContainer } from '../components/common/ChartContainer'
 import { MOCK_MODELS } from '../data/mockData'
-import { ArrowLeft, Cpu, Zap, Sliders, CheckCircle2, Layers, BarChart2 } from 'lucide-react'
+import { ArrowLeft, Cpu, Sliders, AlertTriangle } from 'lucide-react'
 import {
   ResponsiveContainer,
   BarChart,
@@ -19,7 +19,6 @@ import {
 
 export const ModelDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
 
   const model = MOCK_MODELS.find((m) => m.id === id) || MOCK_MODELS[0]
 
@@ -27,6 +26,8 @@ export const ModelDetailPage: React.FC = () => {
     name: f.feature,
     weight: Math.round(f.weight * 100),
   }))
+
+  const displayWape = model.wape ?? model.mape
 
   return (
     <div className="space-y-8 pb-12">
@@ -44,7 +45,7 @@ export const ModelDetailPage: React.FC = () => {
       {/* Header */}
       <PageHeader
         title={model.name}
-        subtitle={`${model.family} Architecture • Version ${model.version}`}
+        subtitle={`${model.family} Architecture • ${model.forecastHorizon || `Version ${model.version}`}`}
         eyebrow="Model Architecture Detail"
         actions={
           <div className="flex items-center gap-2">
@@ -58,23 +59,47 @@ export const ModelDetailPage: React.FC = () => {
         }
       />
 
+      {/* Evaluation Protocol & Cohort Scope Banner */}
+      <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-200/90 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-zinc-900">Evaluation Protocol:</span>
+            <span className="font-mono text-zinc-700 bg-white border border-zinc-200 px-2 py-0.5 rounded">
+              {model.evaluationProtocol || '1-Step-Ahead Rolling Horizon'}
+            </span>
+          </div>
+          <p className="text-zinc-500 text-[11px]">
+            {model.cohortScope || 'Evaluated on 20-series cohort (Stores 1, 10, 14, 20, 35; Depts 1, 7, 72, 92; 380 test rows)'}
+          </p>
+        </div>
+
+        {model.recursiveMultiStepTestWape && (
+          <div className="text-right shrink-0">
+            <span className="text-[10px] font-mono text-zinc-400 block uppercase">Recursive Multi-Step (h=1..19w)</span>
+            <span className="font-mono font-bold text-purple-700 text-sm">
+              {model.recursiveMultiStepTestWape}% WAPE
+            </span>
+          </div>
+        )}
+      </div>
+
       {/* Metric Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Metric
+          label="Test WAPE"
+          value={`${displayWape}%`}
+          delta={{ value: displayWape < 10 ? 'Optimal' : 'Standard', isPositive: displayWape < 15 }}
+          subtext="19-week out-of-time test partition"
+        />
+        <Metric
+          label="Validation WAPE"
+          value={model.valWape ? `${model.valWape}%` : 'N/A'}
+          subtext="18-week out-of-time spring partition"
+        />
+        <Metric
           label="Mean Absolute Error (MAE)"
           value={`$${model.mae.toLocaleString()}`}
-          subtext="Validation holdout set"
-        />
-        <Metric
-          label="Root Mean Squared Error (RMSE)"
-          value={`$${model.rmse.toLocaleString()}`}
-          subtext="Penalty for large outliers"
-        />
-        <Metric
-          label="Mean Absolute % Error (MAPE)"
-          value={`${model.mape}%`}
-          delta={{ value: model.mape < 4.0 ? 'Optimal' : 'Standard', isPositive: model.mape < 4.0 }}
-          subtext="Relative percentage variance"
+          subtext="Test holdout set error"
         />
         <Metric
           label="R² Variance Explained"
@@ -82,6 +107,26 @@ export const ModelDetailPage: React.FC = () => {
           subtext="Goodness-of-fit coefficient"
         />
       </div>
+
+      {/* Uncertainty Diagnostics (If applicable) */}
+      {model.uncertaintyCoveragePicp && (
+        <div className="p-5 bg-amber-50/70 rounded-xl border border-amber-200/80 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-bold text-amber-950 font-display">
+                Prediction Interval Diagnostics — Uncalibrated Heuristic
+              </h4>
+              <p className="text-amber-800 text-[11px] mt-0.5 leading-relaxed">
+                Empirical coverage is {model.uncertaintyCoveragePicp}% against the nominal 95.0% target (Mean Width: ${model.intervalWidthMpiw?.toLocaleString()}). High department-level heterogeneity: Dept 1 over-covered at 100%, while Dept 72 (Electronics) achieved only 40.0% coverage due to markdown surge spikes.
+              </p>
+            </div>
+          </div>
+          <span className="font-mono font-bold px-3 py-1 rounded-full bg-amber-200/60 text-amber-900 border border-amber-300 self-start md:self-auto shrink-0">
+            Shortfall: -22.89%
+          </span>
+        </div>
+      )}
 
       {/* Feature Importance Chart */}
       <ChartContainer
@@ -122,7 +167,7 @@ export const ModelDetailPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <Cpu className="w-4 h-4 text-zinc-700" />
             <h4 className="text-sm font-semibold text-zinc-900 font-display">
-              Operational Performance
+              Operational Performance & Benchmark Context
             </h4>
           </div>
 
@@ -155,7 +200,7 @@ export const ModelDetailPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <Sliders className="w-4 h-4 text-purple-600" />
             <h4 className="text-sm font-semibold text-zinc-900 font-display">
-              Tuned Hyperparameters
+              Tuned Hyperparameters & Training Specs
             </h4>
           </div>
 
@@ -163,7 +208,7 @@ export const ModelDetailPage: React.FC = () => {
             <pre>{JSON.stringify(model.hyperparameters, null, 2)}</pre>
           </div>
           <p className="text-[11px] text-zinc-400">
-            Parameters tuned via 5-fold cross-validation with temporal blocking to avoid data leakage.
+            Fitted strictly on 106-week training partition (2010-02-05 to 2012-02-10). Zero test leakage.
           </p>
         </div>
       </div>

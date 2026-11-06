@@ -44,7 +44,12 @@ export const InsightBlock: React.FC<InsightBlockProps> = ({
   }
 
   return (
-    <div className={`p-5 bg-white rounded-xl border border-zinc-200/80 shadow-subtle hover:border-zinc-300 transition-all duration-150 ${className}`}>
+    <div
+      onClick={onActionClick}
+      className={`p-5 bg-white rounded-xl border border-zinc-200/80 shadow-subtle hover:border-zinc-300 transition-all duration-150 ${
+        onActionClick ? 'cursor-pointer hover:shadow-card' : ''
+      } ${className}`}
+    >
       {/* Category header */}
       <div className="flex items-center justify-between gap-2 mb-2.5">
         <div className="flex items-center gap-2">

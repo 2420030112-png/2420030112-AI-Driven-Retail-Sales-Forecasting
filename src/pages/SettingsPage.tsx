@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { PageHeader } from '../components/common/PageHeader'
 import { ActionButton } from '../components/common/ActionButton'
 import { useApp } from '../context/AppContext'
-import { Save, Key, Shield, Bell, Sliders, Database } from 'lucide-react'
+import { Save, Key, Sliders } from 'lucide-react'
 
 export const SettingsPage: React.FC = () => {
   const { addToast } = useApp()

@@ -1,0 +1,41 @@
+{
+  "total_unique_weeks": 143,
+  "total_rows": 421570,
+  "protocol": "Strict Chronological Partition (Zero-Shuffle)",
+  "train": {
+    "weeks_count": 106,
+    "percentage_weeks": 74.13,
+    "start_date": "2010-02-05",
+    "end_date": "2012-02-10",
+    "rows_count": 311960,
+    "rows_percentage": 74.0,
+    "purpose": "Model training, coefficient learning, and transformer fitting only"
+  },
+  "validation": {
+    "weeks_count": 18,
+    "percentage_weeks": 12.59,
+    "start_date": "2012-02-17",
+    "end_date": "2012-06-15",
+    "rows_count": 53388,
+    "rows_percentage": 12.66,
+    "purpose": "Hyperparameter tuning, tree-depth search, and residual error calibration"
+  },
+  "test": {
+    "weeks_count": 19,
+    "percentage_weeks": 13.29,
+    "start_date": "2012-06-22",
+    "end_date": "2012-10-26",
+    "rows_count": 56222,
+    "rows_percentage": 13.34,
+    "purpose": "Unbiased final model benchmarking and out-of-time evaluation"
+  },
+  "boundary_checks": {
+    "train_max_date": "2012-02-10",
+    "val_min_date": "2012-02-17",
+    "val_max_date": "2012-06-15",
+    "test_min_date": "2012-06-22",
+    "train_val_gap_days": 7,
+    "val_test_gap_days": 7,
+    "leakage_free": true
+  }
+}

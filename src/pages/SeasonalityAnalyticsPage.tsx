@@ -2,11 +2,9 @@ import React from 'react'
 import { PageHeader } from '../components/common/PageHeader'
 import { Metric } from '../components/common/Metric'
 import { ChartContainer } from '../components/common/ChartContainer'
-import { Calendar, Tag, Sparkles, TrendingUp } from 'lucide-react'
+import { Calendar, Tag } from 'lucide-react'
 import {
   ResponsiveContainer,
-  BarChart,
-  Bar,
   LineChart,
   Line,
   XAxis,

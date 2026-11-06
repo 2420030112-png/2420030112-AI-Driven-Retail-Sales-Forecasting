@@ -57,11 +57,26 @@ export const SearchSelect: React.FC<SearchSelectProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const openSelect = () => {
+    if (disabled) return
+    setSearch('')
+    setHighlightedIndex(0)
+    setIsOpen(true)
+  }
+
+  const toggleSelect = () => {
+    if (disabled) return
+    if (!isOpen) {
+      openSelect()
+    } else {
+      setIsOpen(false)
+    }
+  }
+
   useEffect(() => {
     if (isOpen) {
-      setSearch('')
-      setHighlightedIndex(0)
-      setTimeout(() => inputRef.current?.focus(), 50)
+      const timer = setTimeout(() => inputRef.current?.focus(), 50)
+      return () => clearTimeout(timer)
     }
   }, [isOpen])
 
@@ -69,7 +84,7 @@ export const SearchSelect: React.FC<SearchSelectProps> = ({
     if (!isOpen) {
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
         e.preventDefault()
-        setIsOpen(true)
+        openSelect()
       }
       return
     }
@@ -103,7 +118,7 @@ export const SearchSelect: React.FC<SearchSelectProps> = ({
       {/* Trigger Button */}
       <button
         type="button"
-        onClick={() => !disabled && setIsOpen(!isOpen)}
+        onClick={toggleSelect}
         onKeyDown={handleKeyDown}
         disabled={disabled}
         aria-haspopup="listbox"

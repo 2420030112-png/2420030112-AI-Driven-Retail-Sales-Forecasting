@@ -4,7 +4,7 @@ import { Metric } from '../components/common/Metric'
 import { StatusBadge } from '../components/common/StatusBadge'
 import { ActionButton } from '../components/common/ActionButton'
 import { MOCK_DATA_HEALTH } from '../data/mockData'
-import { Database, CheckCircle2, ShieldCheck, RefreshCw, Server, AlertCircle } from 'lucide-react'
+import { Database, ShieldCheck, RefreshCw } from 'lucide-react'
 
 export const DataHealthPage: React.FC = () => {
   const data = MOCK_DATA_HEALTH

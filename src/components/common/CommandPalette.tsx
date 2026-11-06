@@ -14,6 +14,9 @@ import {
   Calendar,
   Layers,
   X,
+  BookOpen,
+  ShieldCheck,
+  FlaskConical,
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { MOCK_STORES, MOCK_MODELS } from '../../data/mockData'
@@ -23,26 +26,21 @@ interface CommandItem {
   title: string
   subtitle?: string
   icon: React.ReactNode
-  category: 'Navigation' | 'Stores' | 'Models' | 'Quick Actions'
+  category: 'Navigation' | 'Stores' | 'Models' | 'Forecasts' | 'Research' | 'Quick Actions'
   action: () => void
 }
 
-export const CommandPalette: React.FC = () => {
-  const { isCommandPaletteOpen, setCommandPaletteOpen } = useApp()
+export const CommandPaletteModal: React.FC = () => {
+  const { setCommandPaletteOpen, forecasts } = useApp()
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isCommandPaletteOpen) {
-      setQuery('')
-      setSelectedIndex(0)
-      setTimeout(() => inputRef.current?.focus(), 60)
-    }
-  }, [isCommandPaletteOpen])
-
-  if (!isCommandPaletteOpen) return null
+    const timer = setTimeout(() => inputRef.current?.focus(), 60)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleSelect = (action: () => void) => {
     action()
@@ -115,6 +113,46 @@ export const CommandPalette: React.FC = () => {
       action: () => navigate('/models'),
     },
     {
+      id: 'nav-research',
+      title: 'Research Lab & Methodology',
+      subtitle: 'Academic framework, Review-3 evidence, and experiment matrices',
+      icon: <BookOpen className="w-4 h-4 text-purple-600" />,
+      category: 'Research',
+      action: () => navigate('/research'),
+    },
+    {
+      id: 'nav-research-literature',
+      title: 'Literature Review & Matrix',
+      subtitle: '12 peer-reviewed studies across classical, ML, and hybrid forecasting',
+      icon: <BookOpen className="w-4 h-4 text-purple-600" />,
+      category: 'Research',
+      action: () => navigate('/research/literature'),
+    },
+    {
+      id: 'nav-research-experiments',
+      title: 'Experiment Engine & Tracking',
+      subtitle: '9-model benchmark matrix with chronological splitting audit',
+      icon: <FlaskConical className="w-4 h-4 text-purple-600" />,
+      category: 'Research',
+      action: () => navigate('/research/experiments'),
+    },
+    {
+      id: 'nav-research-novelty',
+      title: 'Novelty Verification Matrix',
+      subtitle: '11 methodology dimensions evaluated against literature citations',
+      icon: <ShieldCheck className="w-4 h-4 text-purple-600" />,
+      category: 'Research',
+      action: () => navigate('/research/novelty'),
+    },
+    {
+      id: 'nav-research-results',
+      title: 'Benchmark Results & Selection',
+      subtitle: 'Review-3 presentation charts, leaderboard, and dynamic model rationale',
+      icon: <BarChart3 className="w-4 h-4 text-purple-600" />,
+      category: 'Research',
+      action: () => navigate('/research/results'),
+    },
+    {
       id: 'nav-insights',
       title: 'Retail Intelligence Insights',
       subtitle: 'Actionable planning signals and demand trend anomalies',
@@ -140,6 +178,16 @@ export const CommandPalette: React.FC = () => {
     },
   ]
 
+  // Add individual forecasts to search
+  const forecastItems: CommandItem[] = (forecasts || []).map((fc) => ({
+    id: `fc-${fc.id}`,
+    title: `${fc.storeName} — ${fc.deptName}`,
+    subtitle: `${fc.horizonWeeks}w Horizon • ${fc.modelUsed} • $${(fc.projectedSales / 1000).toFixed(0)}k Projected`,
+    icon: <Layers className="w-4 h-4 text-blue-600" />,
+    category: 'Forecasts',
+    action: () => navigate(`/forecasts/${fc.id}`),
+  }))
+
   // Add individual stores to search
   const storeItems: CommandItem[] = MOCK_STORES.map((st) => ({
     id: `store-${st.id}`,
@@ -160,7 +208,7 @@ export const CommandPalette: React.FC = () => {
     action: () => navigate(`/models/${m.id}`),
   }))
 
-  const allItems = [...baseItems, ...storeItems, ...modelItems]
+  const allItems = [...baseItems, ...forecastItems, ...storeItems, ...modelItems]
 
   const filteredItems = allItems.filter(
     (item) =>
@@ -289,4 +337,10 @@ export const CommandPalette: React.FC = () => {
       </div>
     </div>
   )
+}
+
+export const CommandPalette: React.FC = () => {
+  const { isCommandPaletteOpen } = useApp()
+  if (!isCommandPaletteOpen) return null
+  return <CommandPaletteModal />
 }

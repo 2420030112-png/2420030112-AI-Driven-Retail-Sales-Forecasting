@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Sparkles, Plus, Clock, ExternalLink } from 'lucide-react'
+import { ArrowRight, Sparkles, Clock, ExternalLink } from 'lucide-react'
 import { Metric } from '../components/common/Metric'
 import { ChartContainer } from '../components/common/ChartContainer'
 import { StatusBadge } from '../components/common/StatusBadge'
@@ -54,13 +54,12 @@ export const OverviewPage: React.FC = () => {
               </ActionButton>
             </Link>
 
-            <Link to="/forecasts/new">
+            <Link to="/analytics">
               <ActionButton
                 size="md"
                 variant="outline"
-                icon={<Plus className="w-4 h-4" />}
               >
-                New Forecast
+                View analytics
               </ActionButton>
             </Link>
           </div>
@@ -72,20 +71,20 @@ export const OverviewPage: React.FC = () => {
         <Metric
           label="Historical Sales"
           value="$2.21B"
-          delta={{ value: "+4.6%", isPositive: true }}
+          delta={{ value: "421,570 Records", isPositive: true }}
           subtext="Cumulative network revenue across 143 audited trading weeks."
         />
         <Metric
           label="Active Stores"
-          value="45"
-          delta={{ value: "100% Online", isNeutral: true }}
+          value="45 Units"
+          delta={{ value: "Full Catalog", isNeutral: true }}
           subtext="Covering Type A supercenters, Type B, and Type C compact units."
         />
         <Metric
-          label="Departments"
-          value="81"
-          delta={{ value: "Low Error (3.1% MAPE)", isPositive: true }}
-          subtext="Monitored daily with multi-lag feature decay models."
+          label="ML Benchmark Cohort"
+          value="20 Series"
+          delta={{ value: "9.41% Test WAPE", isPositive: true }}
+          subtext="5 Stores (1, 10, 14, 20, 35) & 4 Depts (1, 7, 72, 92) across 380 test rows."
         />
       </section>
 

@@ -1,0 +1,266 @@
+{
+  "train": {
+    "name": "train.csv",
+    "row_count": 421570,
+    "column_count": 5,
+    "memory_usage_mb": 33.77,
+    "columns": [
+      {
+        "column_name": "Store",
+        "dtype": "int64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 45,
+        "sample_values": [
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "column_name": "Dept",
+        "dtype": "int64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 81,
+        "sample_values": [
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "column_name": "Date",
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 143,
+        "sample_values": [
+          "2010-02-05",
+          "2010-02-12",
+          "2010-02-19"
+        ]
+      },
+      {
+        "column_name": "Weekly_Sales",
+        "dtype": "float64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 359464,
+        "sample_values": [
+          "24924.5",
+          "46039.49",
+          "41595.55"
+        ]
+      },
+      {
+        "column_name": "IsHoliday",
+        "dtype": "bool",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 2,
+        "sample_values": [
+          "False",
+          "True",
+          "False"
+        ]
+      }
+    ]
+  },
+  "features": {
+    "name": "features.csv",
+    "row_count": 8190,
+    "column_count": 12,
+    "memory_usage_mb": 1.09,
+    "columns": [
+      {
+        "column_name": "Store",
+        "dtype": "int64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 45,
+        "sample_values": [
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "column_name": "Date",
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 182,
+        "sample_values": [
+          "2010-02-05",
+          "2010-02-12",
+          "2010-02-19"
+        ]
+      },
+      {
+        "column_name": "Temperature",
+        "dtype": "float64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 4178,
+        "sample_values": [
+          "42.31",
+          "38.51",
+          "39.93"
+        ]
+      },
+      {
+        "column_name": "Fuel_Price",
+        "dtype": "float64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 1011,
+        "sample_values": [
+          "2.572",
+          "2.548",
+          "2.514"
+        ]
+      },
+      {
+        "column_name": "MarkDown1",
+        "dtype": "float64",
+        "null_count": 4158,
+        "null_percentage": 50.77,
+        "unique_values": 4023,
+        "sample_values": [
+          "10382.9",
+          "6074.12",
+          "410.31"
+        ]
+      },
+      {
+        "column_name": "MarkDown2",
+        "dtype": "float64",
+        "null_count": 5269,
+        "null_percentage": 64.33,
+        "unique_values": 2715,
+        "sample_values": [
+          "6115.67",
+          "254.39",
+          "98.0"
+        ]
+      },
+      {
+        "column_name": "MarkDown3",
+        "dtype": "float64",
+        "null_count": 4577,
+        "null_percentage": 55.89,
+        "unique_values": 2885,
+        "sample_values": [
+          "215.07",
+          "51.98",
+          "55805.51"
+        ]
+      },
+      {
+        "column_name": "MarkDown4",
+        "dtype": "float64",
+        "null_count": 4726,
+        "null_percentage": 57.7,
+        "unique_values": 3405,
+        "sample_values": [
+          "2406.62",
+          "427.39",
+          "8.0"
+        ]
+      },
+      {
+        "column_name": "MarkDown5",
+        "dtype": "float64",
+        "null_count": 4140,
+        "null_percentage": 50.55,
+        "unique_values": 4045,
+        "sample_values": [
+          "6551.42",
+          "5988.57",
+          "554.92"
+        ]
+      },
+      {
+        "column_name": "CPI",
+        "dtype": "float64",
+        "null_count": 585,
+        "null_percentage": 7.14,
+        "unique_values": 2505,
+        "sample_values": [
+          "211.0963582",
+          "211.2421698",
+          "211.2891429"
+        ]
+      },
+      {
+        "column_name": "Unemployment",
+        "dtype": "float64",
+        "null_count": 585,
+        "null_percentage": 7.14,
+        "unique_values": 404,
+        "sample_values": [
+          "8.106",
+          "8.106",
+          "8.106"
+        ]
+      },
+      {
+        "column_name": "IsHoliday",
+        "dtype": "bool",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 2,
+        "sample_values": [
+          "False",
+          "True",
+          "False"
+        ]
+      }
+    ]
+  },
+  "stores": {
+    "name": "stores.csv",
+    "row_count": 45,
+    "column_count": 3,
+    "memory_usage_mb": 0.0,
+    "columns": [
+      {
+        "column_name": "Store",
+        "dtype": "int64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 45,
+        "sample_values": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "column_name": "Type",
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 3,
+        "sample_values": [
+          "A",
+          "A",
+          "B"
+        ]
+      },
+      {
+        "column_name": "Size",
+        "dtype": "int64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "unique_values": 40,
+        "sample_values": [
+          "151315",
+          "202307",
+          "37392"
+        ]
+      }
+    ]
+  }
+}

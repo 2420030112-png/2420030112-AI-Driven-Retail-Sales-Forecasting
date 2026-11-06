@@ -26,11 +26,20 @@ export const TopBar: React.FC<TopBarProps> = ({ onOpenMobileMenu }) => {
       const isLast = idx === segments.length - 1
 
       let label = seg.charAt(0).toUpperCase() + seg.slice(1)
+      if (seg === 'overview') label = 'Overview'
       if (seg === 'forecasts') label = 'Forecasts'
       if (seg === 'analytics') label = 'Analytics'
+      if (seg === 'sales') label = 'Sales Trends'
+      if (seg === 'stores') label = 'Store Performance'
+      if (seg === 'seasonality') label = 'Seasonality'
       if (seg === 'models') label = 'Model Lab'
       if (seg === 'insights') label = 'Insights'
-      if (seg === 'data') label = 'Data Health'
+      if (seg === 'research') label = 'Research Lab'
+      if (seg === 'literature') label = 'Literature Review'
+      if (seg === 'experiments') label = 'Experiment Matrix'
+      if (seg === 'novelty') label = 'Novelty Verification'
+      if (seg === 'results') label = 'Results & Evidence'
+      if (seg === 'data') label = 'Data'
       if (seg === 'settings') label = 'Settings'
       if (seg === 'new') label = 'New Configuration'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { PageHeader } from '../components/common/PageHeader'
-import { ArrowRight, TrendingUp, Store, Calendar, Layers, ShieldCheck, Activity } from 'lucide-react'
+import { ArrowRight, TrendingUp, Store, Calendar, Activity } from 'lucide-react'
 
 export const AnalyticsHubPage: React.FC = () => {
   const hubs = [

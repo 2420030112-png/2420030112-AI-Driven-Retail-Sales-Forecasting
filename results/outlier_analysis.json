@@ -1,0 +1,49 @@
+{
+  "descriptive_statistics": {
+    "count": 421570,
+    "mean": 15981.26,
+    "median": 7612.03,
+    "std": 22711.18,
+    "min": -4988.94,
+    "q1_25pct": 2079.65,
+    "median_50pct": 7612.03,
+    "q3_75pct": 20205.85,
+    "p95": 61201.95,
+    "p99": 106479.59,
+    "max": 693099.36,
+    "iqr": 18126.2
+  },
+  "iqr_thresholds": {
+    "mild_lower_15iqr": -25109.65,
+    "mild_upper_15iqr": 47395.16,
+    "mild_outlier_count": 35521,
+    "mild_outlier_percentage": 8.43,
+    "extreme_lower_30iqr": -52298.96,
+    "extreme_upper_30iqr": 74584.46,
+    "extreme_outlier_count": 12830,
+    "extreme_outlier_percentage": 3.04
+  },
+  "negative_sales_analysis": {
+    "negative_sales_count": 1285,
+    "negative_sales_percentage": 0.305,
+    "zero_sales_count": 73,
+    "min_negative_value": -4988.94,
+    "mean_negative_value": -68.61,
+    "domain_interpretation": "Negative weekly sales represent net customer merchandise returns, refunds, or debit inventory reconciliation adjustments that exceeded weekly sales volume. These are authentic business transactions, not data transmission errors.",
+    "handling_decision": "Do NOT delete negative sales. Maintain an indicator `is_negative_return`. For models requiring positive targets (log transforms, MAPE denominators), clip to zero or use an offset."
+  },
+  "holiday_surge_investigation": {
+    "top_10_sales_holiday_count": 8,
+    "top_sale_record": {
+      "store": 10,
+      "dept": 72,
+      "date": "2010-11-26",
+      "weekly_sales": 693099.36,
+      "is_holiday": true
+    },
+    "mean_holiday_weekly_sales": 17035.82,
+    "mean_non_holiday_weekly_sales": 15901.45,
+    "holiday_demand_multiplier": 1.071,
+    "handling_decision": "Extreme high sales are driven by genuine holiday surge dynamics (Black Friday / Thanksgiving and Christmas). Deleting high outliers would destroy the seasonal peak signal, causing critical inventory under-replenishment. All high values are retained; models use holiday interaction features and tree splits to capture the non-linear surge."
+  }
+}

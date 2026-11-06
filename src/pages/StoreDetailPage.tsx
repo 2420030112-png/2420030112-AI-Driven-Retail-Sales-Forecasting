@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { PageHeader } from '../components/common/PageHeader'
 import { Metric } from '../components/common/Metric'
 import { ActionButton } from '../components/common/ActionButton'
 import { StatusBadge } from '../components/common/StatusBadge'
 import { ChartContainer } from '../components/common/ChartContainer'
 import { MOCK_STORES, MOCK_DEPARTMENTS, generateForecastSeries } from '../data/mockData'
-import { Plus, ArrowLeft, ArrowUpRight, TrendingUp, Sparkles, Building2, MapPin } from 'lucide-react'
+import { Plus, ArrowLeft, Sparkles, Building2, MapPin } from 'lucide-react'
 import {
   ResponsiveContainer,
   AreaChart,
@@ -19,7 +19,6 @@ import {
 
 export const StoreDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
 
   const store = MOCK_STORES.find((s) => String(s.id) === id) || MOCK_STORES[0]
 

@@ -15,6 +15,11 @@ import { StoreDetailPage } from './pages/StoreDetailPage'
 import { SeasonalityAnalyticsPage } from './pages/SeasonalityAnalyticsPage'
 import { ModelLabPage } from './pages/ModelLabPage'
 import { ModelDetailPage } from './pages/ModelDetailPage'
+import { ResearchLabPage } from './pages/ResearchLabPage'
+import { LiteraturePage } from './pages/LiteraturePage'
+import { ResearchExperimentsPage } from './pages/ResearchExperimentsPage'
+import { NoveltyVerificationPage } from './pages/NoveltyVerificationPage'
+import { ResearchResultsPage } from './pages/ResearchResultsPage'
 import { InsightsPage } from './pages/InsightsPage'
 import { DataHealthPage } from './pages/DataHealthPage'
 import { SettingsPage } from './pages/SettingsPage'
@@ -27,6 +32,7 @@ export function App() {
           <Route path="/" element={<AppShell />}>
             {/* Overview */}
             <Route index element={<OverviewPage />} />
+            <Route path="overview" element={<OverviewPage />} />
 
             {/* Forecasting */}
             <Route path="forecasts" element={<ForecastsPage />} />
@@ -44,6 +50,13 @@ export function App() {
             <Route path="models" element={<ModelLabPage />} />
             <Route path="models/:id" element={<ModelDetailPage />} />
             <Route path="insights" element={<InsightsPage />} />
+
+            {/* Research Lab (Review-3) */}
+            <Route path="research" element={<ResearchLabPage />} />
+            <Route path="research/literature" element={<LiteraturePage />} />
+            <Route path="research/experiments" element={<ResearchExperimentsPage />} />
+            <Route path="research/novelty" element={<NoveltyVerificationPage />} />
+            <Route path="research/results" element={<ResearchResultsPage />} />
 
             {/* System */}
             <Route path="data" element={<DataHealthPage />} />

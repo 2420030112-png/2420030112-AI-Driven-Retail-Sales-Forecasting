@@ -1,0 +1,132 @@
+{
+  "audit_name": "NEXUS Phase 2.1 — ML Experiment Integrity & Reproducibility Audit",
+  "audit_timestamp": "2026-10-15T23:38:00+05:30",
+  "status": "VERIFIED_AUDITED",
+  "dataset_manifest": {
+    "source": "Authentic Walmart Store Sales Dataset (data/raw/)",
+    "training_partition": "106 weeks (2010-02-05 to 2012-02-10) — 311,960 total rows (2,120 benchmark cohort rows)",
+    "validation_partition": "18 weeks (2012-02-17 to 2012-06-15) — 53,388 total rows (360 benchmark cohort rows)",
+    "test_partition": "19 weeks (2012-06-22 to 2012-10-26) — 56,222 total rows (380 benchmark cohort rows)",
+    "benchmark_cohort": {
+      "stores": [1, 10, 14, 20, 35],
+      "store_types": ["Type A (Supercenter)", "Type B (Medium)", "Type C (Compact)"],
+      "departments": [1, 7, 72, 92],
+      "department_categories": ["Candy/Seasonal", "Sporting Goods", "Electronics (Holiday Surge)", "Groceries (Staple)"],
+      "total_series": 20
+    }
+  },
+  "investigation_1_evaluation_protocol_consistency": {
+    "finding": "The difference between Random Forest test WAPE 9.64% and 14.54% stems from two distinct, valid forecasting protocols: 1-Step Rolling vs Fixed-Origin Recursive Multi-Step.",
+    "protocol_a_rolling_one_step": {
+      "definition": "1-Step-Ahead Rolling Horizon Forecasting with Weekly POS Lag Updates (h = 1 week)",
+      "operational_use_case": "Weekly store inventory replenishment ordering after receiving Sunday point-of-sale realized figures.",
+      "feature_construction": "sales_lag_1w uses realized ground-truth sales from week t-1 (available weekly at replenishment time).",
+      "random_forest_test_wape": 9.64,
+      "random_forest_test_mae": 5802.75,
+      "xgboost_test_wape": 9.41,
+      "xgboost_test_mae": 5663.90,
+      "code_location": "src/ml/experiment_runner.py lines 305, 308 (calling rf.predict(test_bm))"
+    },
+    "protocol_b_recursive_multi_step": {
+      "definition": "Fixed-Origin Recursive Multi-Step Forecasting (h = 1..19 weeks ahead from origin T0 = 2012-06-15)",
+      "operational_use_case": "Quarterly open-to-buy merchandise budgeting and warehouse capacity planning conducted 4-5 months in advance with zero intermediate POS feedback.",
+      "feature_construction": "Intermediate test targets y(T0+1)..y(T0+19) are strictly withheld. Short lags (1w, 2w, 4w, 8w) and rolling statistics are dynamically populated using the model's own prior predictions. Long lag 52w uses pre-origin 2011 observations.",
+      "random_forest_test_wape": 14.54,
+      "random_forest_test_mae": 8753.77,
+      "xgboost_test_wape": 14.94,
+      "xgboost_test_mae": 8989.86,
+      "elasticnet_test_wape": 36.71,
+      "elasticnet_test_mae": 22093.21,
+      "code_location": "src/ml/models.py lines 283-352 (predict_recursive_multistep)"
+    },
+    "horizon_degradation_analysis": {
+      "random_forest_degradation_wape": 4.90,
+      "xgboost_degradation_wape": 5.53,
+      "elasticnet_degradation_wape": 14.23,
+      "conclusion": "A chronological split alone does NOT guarantee that multi-step forecasts are leakage-free. When realized weekly lags are withheld, compounding autoregressive error causes an expected 4.9% to 5.5% WAPE horizon degradation in tree models, and a massive 14.2% degradation in linear models. Tree models remain resilient due to pre-origin annual seasonal anchoring (lag 52w)."
+    }
+  },
+  "investigation_2_model_comparison_and_leakage_audit": {
+    "target_row_and_date_alignment": {
+      "validation_target_rows": 360,
+      "test_target_rows": 380,
+      "alignment_status": "EXACT_100_PERCENT_MATCH",
+      "verification": "Every single model generates predictions matching the exact shape, ordering, and (Store, Dept, Date) indices of the test partition in results/predictions_comparison.csv."
+    },
+    "leaderboard_entry_count_explanation": {
+      "nominal_specification": "5 baselines and 4 hybrid candidates",
+      "actual_leaderboard_entries": 10,
+      "explanation": "Specification baseline 5 allowed 'SARIMAX or Prophet'. Because both Prophet and SARIMAX were successfully implemented, trained, and benchmarked per-series, both are transparently reported (Baseline 5A: Prophet, Baseline 5B: SARIMAX), yielding 6 baselines + 4 hybrids = 10 total entries."
+    },
+    "leakage_prevention_verification": {
+      "residual_models_audit": "Prophet+XGBoost (Hybrid A) and SARIMAX+XGBoost (Hybrid B) compute base predictions and residuals strictly on the 106-week training partition. Residual XGBoost models are trained solely on in-sample residuals and never observe validation or test targets.",
+      "time_aware_stacking_audit": "TimeAwareStackingEnsemble (Hybrid C) uses TimeSeriesSplit expanding folds strictly within the 106-week training partition to generate out-of-fold meta-features. Ridge meta-regressor is fit exclusively on out-of-fold training predictions. Zero validation or test target leakage."
+    }
+  },
+  "investigation_3_model_selection_and_validation_divergence": {
+    "selection_protocol": "Strictly on 18-week out-of-time validation partition (2012-02-17 to 2012-06-15) before observing test set outcomes.",
+    "validation_rankings": [
+      {"rank": 1, "model": "Baseline 5A: Prophet", "val_wape": 12.88, "status": "Selected (Validation Winner)"},
+      {"rank": 2, "model": "Baseline 3: Random Forest", "val_wape": 13.02, "status": "Runner-Up"},
+      {"rank": 3, "model": "Hybrid A: Prophet + XGBoost", "val_wape": 13.03, "status": "Audited"},
+      {"rank": 4, "model": "Baseline 4: XGBoost", "val_wape": 13.45, "status": "Audited"},
+      {"rank": 5, "model": "Hybrid C: Stacking Ensemble", "val_wape": 13.72, "status": "Audited"},
+      {"rank": 6, "model": "Hybrid D: Proposed Context-Aware", "val_wape": 15.05, "status": "Audited (Uncertainty Winner)"},
+      {"rank": 7, "model": "Baseline 1: Seasonal Naive", "val_wape": 16.05, "status": "Benchmark Baseline"},
+      {"rank": 8, "model": "Baseline 2: ElasticNet", "val_wape": 24.34, "status": "Linear Benchmark"},
+      {"rank": 9, "model": "Hybrid B: SARIMAX + XGBoost", "val_wape": 38.97, "status": "Audited"},
+      {"rank": 10, "model": "Baseline 5B: SARIMAX", "val_wape": 40.66, "status": "Audited"}
+    ],
+    "validation_vs_test_divergence_analysis": {
+      "validation_winner": "Baseline 5A: Prophet (12.88% Val WAPE)",
+      "test_winner": "Baseline 4: XGBoost (9.41% Test WAPE) / Random Forest (9.64% Test WAPE)",
+      "reason_for_divergence": "The 18-week validation window (Spring 2012) represents steady-state seasonal demand without volatile markdowns, where smooth harmonic Fourier curves fit tightly. The 19-week test window (Summer/Autumn 2012) introduced late-summer promotional markdowns and back-to-school surges, where non-linear decision tree splits adapt much faster to promotional markdowns than static Fourier curves.",
+      "academic_conclusion": "The validation winner did NOT achieve the lowest error on the test set. Maintaining Prophet as the validation-selected model is scientifically honest; retroactively altering the selection based on test outcomes would constitute p-hacking and test set snooping."
+    },
+    "department_level_breakdown_test_wape": {
+      "dept_1_candy_seasonal": {"Random Forest": 6.68, "XGBoost": 6.67, "Prophet": 11.90, "Proposed Hybrid": 13.05},
+      "dept_7_sporting_goods": {"Random Forest": 13.07, "XGBoost": 13.55, "Prophet": 19.65, "Proposed Hybrid": 19.44},
+      "dept_72_electronics_surge": {"Random Forest": 12.46, "XGBoost": 12.46, "Prophet": 20.51, "Proposed Hybrid": 22.21},
+      "dept_92_staple_groceries": {"Random Forest": 7.35, "XGBoost": 6.70, "Prophet": 10.77, "Proposed Hybrid": 12.18}
+    },
+    "store_level_breakdown_test_wape": {
+      "store_1_supercenter": {"Random Forest": 7.54, "XGBoost": 7.97, "Prophet": 10.75, "Proposed Hybrid": 7.13},
+      "store_10_supercenter": {"Random Forest": 7.74, "XGBoost": 7.09, "Prophet": 13.64, "Proposed Hybrid": 18.27},
+      "store_14_suburban": {"Random Forest": 14.38, "XGBoost": 12.91, "Prophet": 20.27, "Proposed Hybrid": 28.00},
+      "store_20_supercenter": {"Random Forest": 7.04, "XGBoost": 8.21, "Prophet": 11.90, "Proposed Hybrid": 12.64},
+      "store_35_compact": {"Random Forest": 12.64, "XGBoost": 11.37, "Prophet": 21.14, "Proposed Hybrid": 13.28}
+    }
+  },
+  "investigation_4_prediction_intervals_and_calibration_shortfall": {
+    "model_evaluated": "Hybrid D: Proposed Context-Aware Multi-Stage Hybrid",
+    "nominal_coverage_intended": 95.0,
+    "empirical_coverage_picp": 72.11,
+    "calibration_shortfall": -22.89,
+    "mean_interval_width_mpiw": 22926.00,
+    "department_coverage_heterogeneity": {
+      "dept_1_picp": 100.0,
+      "dept_7_picp": 78.95,
+      "dept_72_picp": 40.0,
+      "dept_92_picp": 69.47
+    },
+    "store_coverage_heterogeneity": {
+      "store_1_picp": 94.74,
+      "store_10_picp": 71.05,
+      "store_14_picp": 40.79,
+      "store_20_picp": 65.79,
+      "store_35_picp": 88.16
+    },
+    "root_cause_diagnosis": [
+      "1. In-sample residual optimism bias: residual_std_calibration was estimated on in-sample training residuals, underestimating out-of-time test error variance.",
+      "2. Department-level variance heterogeneity: A single global residual standard deviation was applied across all departments. This caused interval bands to over-cover low-variance departments (Dept 1 achieved 100% PICP with excessively wide intervals), while severely under-covering high-variance departments (Dept 72 achieved only 40.0% PICP).",
+      "3. Heavy-tailed non-Gaussian error kurtosis: Using a Gaussian z-score multiplier (1.96) fails to cover leptokurtic retail sales outliers."
+    ],
+    "academic_recommendation": "Do NOT claim that prediction intervals are calibrated. Transparently document that the intervals are uncalibrated heuristic uncertainty bounds with an empirical 72.1% coverage against a 95% nominal target."
+  },
+  "investigation_5_reproducibility_and_verification": {
+    "test_suite_status": "ALL_18_TESTS_PASSING",
+    "execution_time_seconds": 8.94,
+    "csv_to_json_metric_parity": "VERIFIED (All recomputed MAE, RMSE, WAPE from results/predictions_comparison.csv match results/test_metrics.json with 0.0 discrepancy).",
+    "verified_command": ".\\.venv\\Scripts\\pytest tests/ -v"
+  }
+}

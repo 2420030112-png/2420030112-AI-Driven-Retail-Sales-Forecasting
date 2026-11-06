@@ -3,8 +3,6 @@ import { PageHeader } from '../components/common/PageHeader'
 import { Metric } from '../components/common/Metric'
 import { InsightBlock } from '../components/common/InsightBlock'
 import { MOCK_INSIGHTS } from '../data/mockData'
-import { RetailInsight } from '../types'
-import { Sparkles, Filter, Compass, Calendar, ShieldAlert, TrendingUp } from 'lucide-react'
 
 export const InsightsPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All')

@@ -18,7 +18,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   // Derive variant if not explicitly provided
   const resolvedVariant = variant || (() => {
     const s = status.toLowerCase()
-    if (s.includes('complete') || s.includes('active') || s.includes('operational') || s.includes('production') || s.includes('healthy') || s.includes('low')) {
+    if (s.includes('complete') || s.includes('active') || s.includes('operational') || s.includes('production') || s.includes('healthy') || s.includes('low') || s.includes('select')) {
       return 'success'
     }
     if (s.includes('process') || s.includes('sync') || s.includes('moderate') || s.includes('challenger') || s.includes('warning')) {

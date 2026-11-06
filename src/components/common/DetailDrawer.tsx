@@ -113,6 +113,27 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
               </div>
             </div>
 
+            {/* Comparison with Baseline (Section 12) */}
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 font-mono mb-2">
+                Comparison With Baseline
+              </h4>
+              <div className="p-3.5 bg-emerald-50/50 rounded-xl border border-emerald-200/60 space-y-2 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-zinc-600 font-medium">vs Linear Regression:</span>
+                  <span className="font-mono font-bold text-emerald-700">
+                    {(((7.82 - model.mape) / 7.82) * 100).toFixed(1)}% Error Reduction
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-zinc-600 font-medium">vs Standalone XGBoost:</span>
+                  <span className="font-mono font-bold text-emerald-700">
+                    {model.mape <= 3.12 ? `-${(((3.12 - model.mape) / 3.12) * 100).toFixed(1)}% MAPE` : `+${(((model.mape - 3.12) / 3.12) * 100).toFixed(1)}% MAPE`}
+                  </span>
+                </div>
+              </div>
+            </div>
+
             {/* Feature Contribution Visualization */}
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -187,11 +208,11 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
           {/* Drawer Footer */}
           <div className="p-4 px-6 border-t border-zinc-200 bg-zinc-50/60 flex items-center justify-between">
             <Link
-              to={`/models/${model.id}`}
+              to="/models"
               onClick={onClose}
               className="text-xs font-semibold text-zinc-900 hover:text-blue-600 inline-flex items-center gap-1.5"
             >
-              <span>Full Model Comparison in Lab</span>
+              <span>Open full model comparison</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
 

@@ -1,0 +1,26 @@
+{
+  "pipeline_version": "1.0.0",
+  "execution_timestamp": "2026-10-15T22:14:10.719490",
+  "runtime_seconds": 3.38,
+  "raw_dataset_source": "C:\\Users\\Pavan\\Desktop\\DAA project\\data\\raw",
+  "total_records_processed": 421570,
+  "train_rows": 311960,
+  "val_rows": 53388,
+  "test_rows": 56222,
+  "generated_reports": [
+    "schema_report.json",
+    "duplicate_records_report.json",
+    "missing_values_report.json",
+    "outlier_analysis.json",
+    "normality_and_statistics.json",
+    "chronological_split_summary.json",
+    "feature_engineering_summary.json"
+  ],
+  "generated_plots": [
+    "distribution_and_qq",
+    "outliers_and_holidays",
+    "markdown_timeline",
+    "split_timeline"
+  ],
+  "status": "SUCCESSFUL_EXECUTION"
+}

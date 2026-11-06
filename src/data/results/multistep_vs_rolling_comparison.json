@@ -1,0 +1,16 @@
+{
+  "description": "Comparison between 1-step rolling forecasts (weekly ground truth observed) and true recursive multi-step forecasts (zero future target leakage across the 18w/19w horizons).",
+  "random_forest": {
+    "rolling_1step_test_wape": 9.64,
+    "recursive_multistep_test_wape": 14.54,
+    "recursive_multistep_test_mae": 8753.77,
+    "horizon_degradation_wape": 4.9
+  },
+  "xgboost": {
+    "rolling_1step_test_wape": 9.41,
+    "recursive_multistep_test_wape": 14.94,
+    "recursive_multistep_test_mae": 8989.86,
+    "horizon_degradation_wape": 5.53
+  },
+  "leakage_audit_conclusion": "A chronological split alone does not prevent future target leakage if short autoregressive lags use realized target values within the forecast horizon. In strict recursive multi-step forecasting where only predictions are rolled forward, Random Forest achieves 14.54% test WAPE and XGBoost achieves 14.94% test WAPE (representing an expected 4.9% to 5.5% WAPE degradation due to autoregressive error accumulation over 19 weeks). This confirms model robustness even under zero intermediate target feedback."
+}

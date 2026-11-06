@@ -4,7 +4,7 @@ import { PageHeader } from '../components/common/PageHeader'
 import { Metric } from '../components/common/Metric'
 import { StatusBadge } from '../components/common/StatusBadge'
 import { MOCK_STORES } from '../data/mockData'
-import { Search, ArrowUpRight, TrendingUp, TrendingDown, Store as StoreIcon } from 'lucide-react'
+import { Search, ArrowUpRight, TrendingUp, TrendingDown } from 'lucide-react'
 
 export const StoresAnalyticsPage: React.FC = () => {
   const [search, setSearch] = useState('')

@@ -27,6 +27,8 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
+let toastCounter = 0
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [forecasts, setForecasts] = useState<ForecastRecord[]>(() => {
     const saved = localStorage.getItem('nexus_forecasts')
@@ -88,7 +90,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }
 
   const addToast = (t: { title: string; message?: string; type?: 'success' | 'info' | 'warning' }) => {
-    const id = Math.random().toString(36).substring(2, 9)
+    const id = `toast-${++toastCounter}`
     const newToast: ToastMessage = { id, title: t.title, message: t.message, type: t.type || 'info' }
     setToasts(prev => [...prev, newToast])
     setTimeout(() => {

@@ -27,7 +27,7 @@ const defaultFormatter = (val: number) =>
     maximumFractionDigits: 0,
   }).format(val)
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label, formatter = defaultFormatter }: any) => {
   if (active && payload && payload.length) {
     const historical = payload.find((p: any) => p.dataKey === 'historical')?.value
     const forecast = payload.find((p: any) => p.dataKey === 'forecast')?.value
@@ -54,7 +54,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 Historical Sales
               </span>
               <span className="font-mono font-medium text-zinc-900">
-                {defaultFormatter(historical)}
+                {formatter(historical)}
               </span>
             </div>
           )}
@@ -66,7 +66,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 Projected Demand
               </span>
               <span className="font-mono font-semibold text-blue-600">
-                {defaultFormatter(forecast)}
+                {formatter(forecast)}
               </span>
             </div>
           )}
@@ -75,7 +75,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
             <div className="pt-1.5 mt-1.5 border-t border-zinc-100 text-[11px] flex items-center justify-between text-zinc-400">
               <span>95% Confidence</span>
               <span className="font-mono text-zinc-600">
-                {defaultFormatter(lower)} – {defaultFormatter(upper)}
+                {formatter(lower)} – {formatter(upper)}
               </span>
             </div>
           )}
@@ -150,7 +150,7 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({
             width={58}
           />
 
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip formatter={currencyFormatter} />} />
 
           {/* Historical trend */}
           <Area

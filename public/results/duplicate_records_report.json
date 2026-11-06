@@ -1,0 +1,14 @@
+{
+  "train_key_duplicates_store_dept_date": 0,
+  "features_key_duplicates_store_date": 0,
+  "stores_key_duplicates_store": 0,
+  "invalid_date_formats_train": 0,
+  "invalid_date_formats_features": 0,
+  "unique_stores_in_train": 45,
+  "unique_stores_in_features": 45,
+  "unique_stores_in_stores_master": 45,
+  "unmapped_stores_between_train_and_stores": [],
+  "unique_departments_in_train": 81,
+  "unique_weekly_dates_in_train": 143,
+  "integrity_status": "PASSED"
+}

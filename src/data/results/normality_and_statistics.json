@@ -1,0 +1,36 @@
+{
+  "raw_sales_moments": {
+    "skewness": 3.262,
+    "excess_kurtosis": 21.491,
+    "skewness_classification": "Highly Right-Skewed",
+    "kurtosis_classification": "Leptokurtic (Heavy-Tailed)"
+  },
+  "log_transformed_moments": {
+    "skewness": -1.2906,
+    "excess_kurtosis": 1.9372,
+    "transformation_effect": "Log-transformation substantially reduced skewness from 3.26 to -1.29 and excess kurtosis from 21.49 to 1.94."
+  },
+  "statistical_tests": {
+    "jarque_bera": {
+      "statistic": 8860460.963800946,
+      "p_value": 0.0,
+      "null_hypothesis": "Data is normally distributed",
+      "rejected": true
+    },
+    "dagostino_pearson": {
+      "statistic": 310589.58603193326,
+      "p_value": 0.0,
+      "null_hypothesis": "Data is normally distributed",
+      "rejected": true
+    },
+    "shapiro_wilk_sample": {
+      "sample_size": 5000,
+      "statistic": 0.6813,
+      "p_value": 1.0239347794882414e-70,
+      "null_hypothesis": "Sample is drawn from normal distribution",
+      "rejected": true
+    }
+  },
+  "conclusion": "The null hypothesis of marginal normality is decisively rejected across all formal tests (p < 0.0001), reflecting strong positive skewness (3.26) and heavy leptokurtic tails (21.49) driven by holiday surges. Rejecting unconditional normality does not, by itself, prove that non-linear or tree ensembles are superior to linear models (since linear models do not require normally distributed targets to yield unbiased estimates under Gauss-Markov). However, it indicates substantial distributional asymmetry and potential heteroskedasticity. The scientific justification for model selection must therefore be established through empirical out-of-time validation metrics (WAPE, MAE) and post-hoc residual diagnostics.",
+  "is_gaussian": false
+}

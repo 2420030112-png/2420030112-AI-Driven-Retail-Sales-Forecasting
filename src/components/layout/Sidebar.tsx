@@ -6,6 +6,7 @@ import {
   BarChart3,
   Sliders,
   Sparkles,
+  BookOpen,
   Database,
   Settings,
   X,
@@ -56,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       title: 'ANALYTICS',
       items: [
         {
-          label: 'Analytics Hub',
+          label: 'Analytics',
           to: '/analytics',
           icon: <BarChart3 className="w-4 h-4" />,
         },
@@ -79,10 +80,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       ],
     },
     {
+      title: 'RESEARCH',
+      items: [
+        {
+          label: 'Research Lab',
+          to: '/research',
+          icon: <BookOpen className="w-4 h-4" />,
+          badge: 'Review 3',
+        },
+      ],
+    },
+    {
       title: 'SYSTEM',
       items: [
         {
-          label: 'Data Health',
+          label: 'Data',
           to: '/data',
           icon: <Database className="w-4 h-4" />,
         },
@@ -96,7 +108,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   ]
 
   const isActiveLink = (to: string) => {
-    if (to === '/') return location.pathname === '/'
+    if (to === '/') return location.pathname === '/' || location.pathname === '/overview'
     return location.pathname.startsWith(to)
   }
 
@@ -149,10 +161,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       </div>
 
       {/* Navigation Sections */}
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5">
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
         {navSections.map((section) => (
           <div key={section.title}>
-            <h3 className="px-2.5 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-mono">
+            <h3 className="px-2.5 mb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-mono">
               {section.title}
             </h3>
             <div className="space-y-0.5">
@@ -177,7 +189,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {item.badge && (
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-100">
+                      <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full font-semibold border ${
+                        item.badge.includes('Review') 
+                          ? 'bg-purple-50 text-purple-700 border-purple-100'
+                          : 'bg-blue-50 text-blue-700 border-blue-100'
+                      }`}>
                         {item.badge}
                       </span>
                     )}
@@ -189,8 +205,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         ))}
       </div>
 
-      {/* Subtle Workspace / Profile Footer */}
-      <div className="p-3 border-t border-zinc-100 bg-zinc-50/50">
+      {/* System Status & Workspace Footer */}
+      <div className="p-3 border-t border-zinc-100 bg-zinc-50/50 space-y-2">
+        {/* System Status Indicator */}
+        <div className="px-2 py-1.5 rounded-lg bg-emerald-50/60 border border-emerald-200/60 flex items-center justify-between text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-medium text-emerald-900">System Operational</span>
+          </div>
+          <span className="text-[10px] font-mono text-emerald-700">143w Synced</span>
+        </div>
+
+        {/* User / Workspace */}
         <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-white transition-colors cursor-pointer border border-transparent hover:border-zinc-200/80">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-600 flex items-center justify-center text-white text-xs font-semibold shadow-sm shrink-0">
             RK
@@ -200,9 +226,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <span className="text-xs font-semibold text-zinc-900 truncate">
                 Retail Network
               </span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" title="Online" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" title="Online" />
             </div>
-            <p className="text-[11px] text-zinc-400 truncate">45 Active Stores • Prod</p>
+            <p className="text-[11px] text-zinc-400 truncate">45 Stores • Review-3 Env</p>
           </div>
         </div>
       </div>

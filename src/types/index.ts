@@ -39,11 +39,41 @@ export interface ForecastRecord {
   confidenceScore: number
   interpretation: string
   metrics: {
-    mae: number
-    rmse: number
-    mape: number
-    r2: number
+    mae?: number
+    rmse?: number
+    mape?: number
+    r2?: number
+    wape?: number
+    valWape?: number
   }
+  // Phase 4 Real Forecast Inference attributes
+  protocol?: 'recursive_multistep' | 'rolling_onestep'
+  forecastOriginDate?: string
+  isRealInference?: boolean
+  executionLatencyMs?: number
+  uncertainty?: {
+    isSupported: boolean
+    calibrated: boolean
+    empiricalCoveragePicp?: number
+    nominalCoverageTarget?: number
+    mpiwDollars?: number
+    method?: string
+    warning?: string
+  }
+  predictions?: Array<{
+    date: string
+    predictedSales: number
+    lowerBound?: number | null
+    upperBound?: number | null
+    isHoliday?: boolean
+    holidayName?: string
+    actualSales?: number | null
+  }>
+  historicalContext?: Array<{
+    date: string
+    sales: number
+    isHoliday?: boolean
+  }>
 }
 
 export interface TimeSeriesPoint {
@@ -60,18 +90,29 @@ export interface TimeSeriesPoint {
 export interface ModelBenchmark {
   id: string
   name: string
-  family: 'Linear' | 'Tree-Ensemble' | 'Time Series' | 'Additive'
+  family: 'Linear' | 'Tree-Ensemble' | 'Time Series' | 'Additive' | 'Residual-Hybrid' | 'Stacking-Ensemble'
   version: string
   description: string
   mae: number
   rmse: number
   mape: number
+  wape?: number
   r2: number
+  valMae?: number
+  valRmse?: number
+  valWape?: number
+  valR2?: number
   trainingTimeSec: number
   inferenceLatencyMs: number
   featuresCount: number
   bestFor: string
-  status: 'Production' | 'Challenger' | 'Experimental' | 'Deprecated'
+  status: 'Production' | 'Challenger' | 'Experimental' | 'Deprecated' | 'Selected'
+  evaluationProtocol?: string
+  forecastHorizon?: string
+  recursiveMultiStepTestWape?: number
+  uncertaintyCoveragePicp?: number
+  intervalWidthMpiw?: number
+  cohortScope?: string
   hyperparameters: Record<string, string | number | boolean>
   featureImportance: { feature: string; weight: number }[]
 }
@@ -109,3 +150,82 @@ export interface DataHealthMetric {
     recordCount: string
   }[]
 }
+
+export type LiteratureCategory = 
+  | 'Classical forecasting'
+  | 'Machine learning'
+  | 'Deep learning'
+  | 'Hybrid forecasting'
+  | 'Retail forecasting'
+  | 'Walmart forecasting'
+
+export interface LiteratureRecord {
+  id: string
+  title: string
+  authors: string
+  year: number
+  venue: string
+  category: LiteratureCategory
+  dataset: string
+  methodology: string
+  model: string
+  metrics: string
+  strengths: string
+  limitations: string
+  researchGap: string
+  relevanceToNexus: string
+  doi: string
+  link?: string
+  isHybrid: boolean
+}
+
+export type NoveltyStatus =
+  | 'Existing'
+  | 'Partially explored'
+  | 'Different implementation'
+  | 'Potential contribution'
+  | 'Requires verification'
+
+export interface NoveltyItem {
+  id: string
+  featureOrApproach: string
+  category: 'Data & Features' | 'Model Architecture' | 'Evaluation & Splits' | 'System & UX'
+  existingLiterature: string
+  ourImplementation: string
+  status: NoveltyStatus
+  evidence: string
+  primaryCitation: string
+}
+
+export interface ExperimentRecord {
+  id: string
+  modelName: string
+  type: 'Baseline' | 'Hybrid A (Prophet+XGB)' | 'Hybrid B (ARIMA+XGB)' | 'Hybrid C (Stacking)' | 'Proposed Hybrid'
+  datasetVersion: string
+  featureConfig: string
+  splitMethod: string
+  trainingPeriod: string
+  testingPeriod: string
+  mae: number
+  rmse: number
+  mape: number
+  wape?: number
+  r2: number
+  valMae?: number
+  valRmse?: number
+  valWape?: number
+  valMape?: number
+  valR2?: number
+  trainingTimeSec: number
+  predictionTimeMs: number
+  status: 'Completed' | 'Selected' | 'Audited'
+  architectureSummary: string
+  selectionRationale?: string
+  evaluationProtocol?: string
+  forecastHorizon?: string
+  recursiveMultiStepTestWape?: number
+  uncertaintyCoveragePicp?: number
+  intervalWidthMpiw?: number
+  cohortScope?: string
+}
+

@@ -1,0 +1,20 @@
+{
+  "markdown_columns_treated": [
+    "MarkDown1",
+    "MarkDown2",
+    "MarkDown3",
+    "MarkDown4",
+    "MarkDown5"
+  ],
+  "markdown_imputation_value": 0.0,
+  "markdown_justification": "MarkDown1-MarkDown5 represent promotional price discounts introduced by Walmart in Nov 2011. Prior to Nov 2011, values are structurally null (no markdown campaign active). Post-Nov 2011 nulls represent weeks where no discount was applied. Imputing with 0.0 preserves true dollar promotional magnitude without distorting non-promotional baselines.",
+  "pre_treatment_null_counts": {
+    "MarkDown1": 270889,
+    "MarkDown2": 310322,
+    "MarkDown3": 284479,
+    "MarkDown4": 286603,
+    "MarkDown5": 270138
+  },
+  "post_treatment_null_counts": {},
+  "total_nulls_remaining": 0
+}
